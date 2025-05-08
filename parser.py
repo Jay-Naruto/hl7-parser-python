@@ -27,7 +27,7 @@ def parse_hl7_message(hl7_message: str) -> dict:
     missing = required_sections - present
 
     if missing:
-        print(f"Malformed message: Missing required sections: {', '.join(missing)}")
+        print(f"\nMalformed message: Missing required sections: {', '.join(missing)}")
         return None     
     
 
@@ -48,7 +48,7 @@ def parse_hl7_message(hl7_message: str) -> dict:
                     dt = datetime.strptime(fields[3][:12], "%Y%m%d%H%M")
                     json_structure["appointment_datetime"] = dt.isoformat() + "Z"
                 except ValueError:
-                    print(f"Inappropriate Date Format")
+                    print(f"\nInappropriate Date Format")
                     pass
             if len(fields) > 5:
                 json_structure["location"] = fields[5].strip()
@@ -66,16 +66,16 @@ def parse_hl7_message(hl7_message: str) -> dict:
                 if len(name_parts) > 1:
                     json_structure["patient"]["first_name"] = name_parts[1]
 
-            if len(fields) > 7:
+            if len(fields) >7:
                 dob = fields[7].strip()
                 if len(dob) != 8 or not dob.isdigit():
-                    print("Inappropriate DOB format: must be 8 digits YYYYMMDD")
+                    print("\nInappropriate DOB format: must be 8 digits YYYYMMDD")
                 else:
                     try:
                         dt = datetime.strptime(dob, "%Y%m%d")
                         json_structure["patient"]["dob"] = dt.strftime("%Y-%m-%d")
                     except ValueError:
-                        print("Inappropriate DOB value: invalid calendar date")
+                        print("\nInappropriate DOB value: invalid calendar date")
 
 
             if len(fields) > 8:
